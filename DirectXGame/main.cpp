@@ -86,7 +86,7 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 		input->Update();
 
 		// シーンの更新と切り替え
-		//UpdateScene();
+		UpdateScene();
 		//ChangeScene();
 
 		// 軸表示の更新
@@ -121,5 +121,9 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 
 	return 0;
 }
+
+void ChangeScene() {}
+
+void UpdateScene() { gameScene->Update(); }
 
 void DrawScene() { gameScene->Draw(); }
