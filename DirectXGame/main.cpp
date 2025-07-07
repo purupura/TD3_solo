@@ -1,8 +1,18 @@
 #include <Windows.h>
 #include <KamataEngine.h>
 #include "GameScene.h"
+#include "TitleScene.h"
 
 using namespace KamataEngine;
+
+enum class Scene {
+
+	kUnknown = 0,
+
+	kTitle, // タイトルシーン
+	kGame,  // ゲームシーン
+
+};
 
 void ChangeScene();
 void UpdateScene();
@@ -10,6 +20,11 @@ void DrawScene();
 
 // ゲームシーン
 GameScene* gameScene = nullptr;
+
+TitleScene* titleScene = nullptr; // タイトルシーンのポインタ
+
+Scene scene = Scene::kUnknown; // 現在のシーンを表す変数
+
 
 // Windowsアプリでのエントリーポイント(main関数)
 int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
@@ -66,11 +81,11 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 #pragma endregion
 
 	// タイトルシーンの初期化
-	//titleScene = new TitleSence();
-	//titleScene->Initialize();
+	titleScene = new TitleScene();
+	titleScene->Initialize();
 
 	// シーンをタイトルシーンに設定
-	//scene = Scene::kTitleScene;
+	scene = Scene::kTitle;
 	// scene = Scene::kGameScene;
 
 	// メインループ
@@ -87,7 +102,7 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 
 		// シーンの更新と切り替え
 		UpdateScene();
-		//ChangeScene();
+		ChangeScene();
 
 		// 軸表示の更新
 		axisIndicator->Update();
@@ -122,8 +137,50 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 	return 0;
 }
 
-void ChangeScene() {}
+void UpdateScene() {
+	switch (scene) {
+	case Scene::kTitle:
+		titleScene->Update();
+		break;
 
-void UpdateScene() { gameScene->Update(); }
+	case Scene::kGame:
+		gameScene->Update();
+		break;
+	}
+}
 
-void DrawScene() { gameScene->Draw(); }
+void DrawScene() {
+	switch (scene) {
+	case Scene::kTitle:
+		titleScene->Draw();
+		break;
+
+	case Scene::kGame:
+		gameScene->Draw();
+		break;
+	}
+}
+
+void ChangeScene() {
+	switch (scene) {
+	case Scene::kTitle:
+		if (titleScene && titleScene->IsGameFinished()) {
+			delete titleScene;
+			titleScene = nullptr;
+			scene = Scene::kGame;
+			gameScene = new GameScene();
+			gameScene->Initialize();
+		}
+		break;
+
+	case Scene::kGame:
+		if (gameScene && gameScene->IsFinished()) {
+			delete gameScene;
+			gameScene = nullptr;
+			scene = Scene::kTitle;
+			titleScene = new TitleScene();
+			titleScene->Initialize();
+		}
+		break;
+	}
+}

@@ -1,6 +1,7 @@
 #include "GameScene.h"
 GameScene::~GameScene() { 
-
+	delete TestSprite_;
+	delete camera_; 
 }
 
 void GameScene::Initialize() {
@@ -16,8 +17,9 @@ void GameScene::Initialize() {
 void GameScene::Update() {
 	// ビュープロジェクションの初期化
 	//camera_.Initialize();
-	TestSprite_->SetPosition({10, 10}); // スプライトの位置を設定
-
+	if (input_->TriggerKey(DIK_SPACE)) {
+		isFinished_ = true;
+	}
 }
 
 void GameScene::Draw() {

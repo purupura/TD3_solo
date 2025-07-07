@@ -26,6 +26,8 @@ public:
 	/// </summary>
 	void Draw();
 
+	bool IsFinished() const { return isFinished_; }
+
 private:
 	DirectXCommon* dxCommon_ = nullptr;
 	Input* input_ = nullptr;
@@ -34,4 +36,6 @@ private:
 
 	uint32_t textureHandle_ = 0;
 	Sprite* TestSprite_ = nullptr;
+
+	bool isFinished_ = false;
 };
