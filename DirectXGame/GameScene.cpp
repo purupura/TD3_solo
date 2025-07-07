@@ -16,6 +16,8 @@ void GameScene::Initialize() {
 void GameScene::Update() {
 	// ビュープロジェクションの初期化
 	//camera_.Initialize();
+	TestSprite_->SetPosition({10, 10}); // スプライトの位置を設定
+
 }
 
 void GameScene::Draw() {
